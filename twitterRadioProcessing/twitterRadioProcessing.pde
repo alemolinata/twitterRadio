@@ -225,7 +225,7 @@ String isTalking() {
 }
 
 void setVolume(){
-  String[] command = {"/usr/bin/osascript", "-e", "\"set volume " + volumeValue + "\""};
+  String[] command = {"osascript", "-e", "set volume " + volumeValue};
   try {
     Runtime.getRuntime().exec(command);
   } 

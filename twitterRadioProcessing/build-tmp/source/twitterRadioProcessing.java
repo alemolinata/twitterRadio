@@ -250,10 +250,9 @@ public String isTalking() {
 }
 
 public void setVolume(){
-  Process pp;
-  String[] command = {"/usr/bin/osascript", "-e", "\"set volume " + volumeValue + "\""};
+  String[] command = {"osascript", "-e", "set volume " + volumeValue};
   try {
-    pp = Runtime.getRuntime().exec(command);
+    Runtime.getRuntime().exec(command);
   } 
   catch (Exception e) {
     e.printStackTrace();
