@@ -20,10 +20,10 @@ void loop() {
     int toneDif = abs(toneReading - toneReadingPrev);
     int volumeDif = abs(volumeReading - volumeReadingPrev);
 
-    if(radiusDif > 5 || toneDif > 5 || volumeDif > 5){
+    if(radiusDif > 20 || toneDif > 20 || volumeDif > 20){
       int radiusValue = int(radiusReading/342);
       int toneValue = int(toneReading/342);
-      int volumeValue = volumeReading;
+      int volumeValue = int(round(volumeReading/102.3));
 
       Serial.print(radiusValue);
       Serial.print(",");

@@ -34,12 +34,13 @@ boolean silenced = false;
 
 Serial myPort;
 
-int prevRadiusValue = 0;
-int prevToneValue = 0;
-
 int radiusValue = 0;
 int toneValue = 0;
 int volumeValue = 0;
+
+int prevRadiusValue = 0;
+int prevToneValue = 0;
+int prevVolumeValue = 0;
 
 void setup() {
 
@@ -140,6 +141,9 @@ void runTweetsChoreo(Query query) {
 }
 
 void draw() {
+  if(volumeValue != prevVolumeValue){
+    setVolume();
+  }
   getValues();
   isTalking();
   if(!macIsTalking){
@@ -188,7 +192,6 @@ void getQueries(){
 }
 
 String isTalking() {
-  
   String id = "";
   
   try {
@@ -221,6 +224,17 @@ String isTalking() {
   return id;
 }
 
+void setVolume(){
+  String[] command = {"/usr/bin/osascript", "-e", "\"set volume " + volumeValue + "\""};
+  try {
+    Runtime.getRuntime().exec(command);
+  } 
+  catch (Exception e) {
+    e.printStackTrace();
+  }
+}
+
+
 void serialEvent(Serial thisPort) { 
   // read the serial buffer:
   String inputString = thisPort.readStringUntil('\n');
@@ -239,9 +253,26 @@ void serialEvent(Serial thisPort) {
       radiusValue = sensors[0];
       toneValue = sensors[1];
       volumeValue = sensors[2];
-      println(radiusValue + ", " + toneValue + ", " + volumeValue);
+      //println(radiusValue + ", " + toneValue + ", " + volumeValue);
     }
   }
 }
-
+/*
+String command = "set volume " + value;
+try {
+  ProcessBuilder pb = new ProcessBuilder("osascript","-e",command);
+  pb.directory(new File("/usr/bin"));
+  StringBuffer output = new StringBuffer();
+  Process p = pb.start();
+  p.waitFor();
+  BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
+  String line;
+  while ((line = reader.readLine())!= null) {
+    output.append(line + "\n"); 
+  }
+  System.out.println(output);
+} 
+catch(Exception e) {
+  System.out.println(e); 
+}*/
 
