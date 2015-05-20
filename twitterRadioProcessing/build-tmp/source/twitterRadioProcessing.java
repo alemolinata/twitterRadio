@@ -201,7 +201,7 @@ public void getValues(){
   if(radiusValue != prevRadiusValue || toneValue != prevToneValue){
     stopTalking();
     getQueries();
-    queryCounter = -1;
+    queryCounter = 0;
     prevRadiusValue = radiusValue;
     prevToneValue = toneValue;
   }
@@ -282,24 +282,7 @@ public void serialEvent(Serial thisPort) {
     }
   }
 }
-/*
-String command = "set volume " + value;
-try {
-  ProcessBuilder pb = new ProcessBuilder("osascript","-e",command);
-  pb.directory(new File("/usr/bin"));
-  StringBuffer output = new StringBuffer();
-  Process p = pb.start();
-  p.waitFor();
-  BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
-  String line;
-  while ((line = reader.readLine())!= null) {
-    output.append(line + "\n"); 
-  }
-  System.out.println(output);
-} 
-catch(Exception e) {
-  System.out.println(e); 
-}*/
+
 
 class Query {
   public int radius;

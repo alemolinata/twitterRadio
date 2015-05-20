@@ -13,9 +13,11 @@ void loop() {
     int inByte = Serial.read();
 
     int radiusReading = analogRead(A0);
+
     int toneReading = analogRead(A1);
     int volumeReading = analogRead(A2);
-
+    volumeReading = 1023 - volumeReading;
+    
     int radiusDif = abs(radiusReading - radiusReadingPrev);
     int toneDif = abs(toneReading - toneReadingPrev);
     int volumeDif = abs(volumeReading - volumeReadingPrev);
