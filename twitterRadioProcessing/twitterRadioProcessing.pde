@@ -30,9 +30,10 @@ int queryCounter = 0;
 String id;
 boolean macIsTalking;
 
-boolean silenced = false;
-
 Serial myPort;
+
+boolean radioOn = false;
+boolean prevRadioOn = false;
 
 int radiusValue = 0;
 int toneValue = 0;
@@ -141,19 +142,26 @@ void runTweetsChoreo(Query query) {
 }
 
 void draw() {
-  if(volumeValue != prevVolumeValue){
-    setVolume();
-  }
-  getValues();
-  isTalking();
-  if(!macIsTalking){
-    queryCounter ++;
-    if (queryCounter>2){
-      queryCounter = 0;
+  if(radioOn != prevRadioOn){
+    if(!radioOn){
+      stopTalking();
     }
-    runTweetsChoreo(queriesToSearch.get(queryCounter));
+    prevRadioOn = radioOn;
   }
-
+  if(radioOn){
+    if(volumeValue != prevVolumeValue){
+      setVolume();
+    }
+    getValues();
+    isTalking();
+    if(!macIsTalking){
+      queryCounter ++;
+      if (queryCounter>2){
+        queryCounter = 0;
+      }
+      runTweetsChoreo(queriesToSearch.get(queryCounter));
+    }
+  }
 }
 
 void stopTalking(){
@@ -234,7 +242,6 @@ void setVolume(){
   }
 }
 
-
 void serialEvent(Serial thisPort) { 
   // read the serial buffer:
   String inputString = thisPort.readStringUntil('\n');
@@ -249,10 +256,16 @@ void serialEvent(Serial thisPort) {
     int sensors[] = int(split(inputString, ','));
 
     // if we have received all the sensor values, use them:
-    if (sensors.length == 3) {
+    if (sensors.length == 4) {
       radiusValue = sensors[0];
       toneValue = sensors[1];
       volumeValue = sensors[2];
+      if(sensors[3] == 0){
+        radioOn = false;
+      }
+      else{
+        radioOn = true;
+      }
       //println(radiusValue + ", " + toneValue + ", " + volumeValue);
     }
   }
